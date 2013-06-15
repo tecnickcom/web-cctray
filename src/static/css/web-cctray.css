@@ -1,0 +1,112 @@
+/**
+ * web-cctray.css
+ *
+ * File name     : web-cctray.css
+ * Description   : Main CSS file for web-cctray.
+ *
+ * @category   Dashboards
+ * @author     Nicola Asuni <nicola.asuni@tecnick.com>
+ * @copyright  2013-2017 Nicola Asuni - Tecnick.com LTD
+ * @license    MIT (see LICENSE)
+ * @link       https://github.com/tecnickcom/web-cctray
+ */
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+	background-color: black;
+	height: 100%;
+	width: 100%;
+	font-size: 1em;
+}
+
+.main {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.row {
+	clear: left;
+	overflow: auto;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+div.row div {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border-style: solid;
+	border-width: 0.5em;
+	float: left;
+	text-align: center;
+	padding: 0.4em;
+	margin: 0.1em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#info {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#col_Sleeping {
+}
+
+#col_Building {
+	background-color: gold !important;
+	color: black !important;
+}
+
+#col_CheckingModifications {
+}
+
+#col_Pending {
+}
+
+.status_Success {
+	border-color: DarkGreen;
+	background-color: Green;
+	color: white;
+}
+
+.status_Failure {
+	border-color: DarkRed;
+	background-color: Red;
+	color: white;
+}
+
+.status_Exception {
+	border-color: Fuchsia;
+	background-color: Magenta;
+	color: white;
+}
+
+.status_Unknown {
+	border-color: Gray;
+	background-color: DimGray;
+	color: white;
+}
+
+.pipelineName {
+	color: inherit;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.lastBuildLabel {
+}
+
+.lastBuildTime {
+}

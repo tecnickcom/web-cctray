@@ -1,0 +1,11 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ~#PROJECT#~
+Source: https://github.com/~#VENDOR#~/~#PROJECT#~
+
+Files: *
+Copyright: Copyright 2013-2017 Nicola Asuni Tecnick.com <info@tecnick.com>
+License: MIT
+
+License: MIT
+ For full license and copyright terms please read:
+ /usr/share/doc/~#VENDOR#~-~#PROJECT#~/LICENSE
