@@ -52,7 +52,7 @@ The following is a list of CI/CD systems that provides a cctray.xml file:
 * [Travis](https://travis-ci.org)
 
 
-## Gettign stated (for developers)
+## Getting started (for developers)
 
 This project include a Makefile that allows you to automate common operations in a Debian/Ubuntu enviromnent.
 
