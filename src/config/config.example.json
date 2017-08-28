@@ -3,7 +3,8 @@
   "dashboard": [
     {
       "name": "demo1",
-      "url": "http://localhost//cctray.example.xml",
+      "url": "http://localhost/cctray.example.xml",
+      "access": "user:password",
       "grid": [
         [
           "build-linux :: build-non-server",
@@ -16,7 +17,8 @@
     },
     {
       "name": "demo2",
-      "url": "http://localhost//cctray.example.xml",
+      "url": "http://localhost/cctray.example.xml",
+      "access": "",
       "grid": [
         [
           "build-linux :: build-non-server :: util",

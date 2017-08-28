@@ -32,7 +32,7 @@
 		return map;
 	}
 
-	function loadRemoteURL(url, mime, callback){
+	function loadRemoteURL(url, access, mime, callback){
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState === 4 && xhr.status === 200){
@@ -41,13 +41,17 @@
 		}
 		xhr.overrideMimeType(mime);
 		xhr.open('GET', url, true);
+		xhr.withCredentials = true;
+		if (access) {
+			xhr.setRequestHeaders('Authorization', 'Basic '+btoa(access));
+		}
 		xhr.send();
 	}
 
 	function parseCctray(xml) {
 		var obj = {};
 		parser = new DOMParser();
-		xmlDoc = parser.parseFromString(xml, "text/xml");
+		xmlDoc = parser.parseFromString(xml, 'text/xml');
 		var xtag = xmlDoc.getElementsByTagName('Project');
 		for (var i = 0; i < xtag.length; i++) {
 			elem = xtag[i].attributes;
@@ -56,14 +60,14 @@
 				var attribute = elem.item(j);
 				attr[attribute.nodeName] = attribute.nodeValue;
 			}
-			obj[attr["name"]] = attr;
+			obj[attr['name']] = attr;
 		}
 		return obj;
 	}
 
 	function loadDashboard(config, dlist, idx, max, delay) {
 		dashboard = config.dashboard[dlist[idx]];
-		loadRemoteURL(dashboard.url, "application/xml", function(ctx) {
+		loadRemoteURL(dashboard.url, dashboard.access, 'application/xml', function(ctx) {
 			xitem = parseCctray(ctx);
 			
 			var mainDiv = document.createElement('div');
@@ -86,7 +90,7 @@
 					var colDiv = document.createElement('div');
 					colDiv.style.width = ''+(100 / numCols)+'%';
 					colDiv.id = 'col_' + xitem[name].activity;
-					colDiv.className = "status_"+xitem[name].lastBuildStatus;
+					colDiv.className = 'status_'+xitem[name].lastBuildStatus;
 					colDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName">'+name+'</a><br/><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span> - <span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span>';
 					rowDiv.appendChild(colDiv);
 				}
@@ -105,13 +109,13 @@
 		setTimeout(loadDashboard, delay, config, dlist, idx, max, delay);
 	}
 
-	loadRemoteURL("config/config.json", "application/json", function(cfg) {
+	loadRemoteURL('config/config.json', '', 'application/json', function(cfg) {
 		var config = JSON.parse(cfg);
 		var numDashboards = config.dashboard.length;
 		// select dashboards to display
 		var dlist = [];
 		for (var i = 0; i < numDashboards; i++) {
-			if ((mode == "rotate") || (config.dashboard[i]["name"] == mode)) {
+			if ((mode == 'rotate') || (config.dashboard[i]['name'] == mode)) {
 				dlist.push(i);
 			}
 		}
