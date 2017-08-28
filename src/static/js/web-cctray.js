@@ -43,7 +43,7 @@
 		xhr.open('GET', url, true);
 		xhr.withCredentials = true;
 		if (access) {
-			xhr.setRequestHeaders('Authorization', 'Basic '+btoa(access));
+			xhr.setRequestHeader('Authorization', 'Basic '+btoa(access));
 		}
 		xhr.send();
 	}
