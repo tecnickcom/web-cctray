@@ -81,7 +81,7 @@
 				rowDiv.id = 'row_' + r;
 				rowDiv.className = 'row';
 				rowDiv.style.height = ''+(100 / numRows)+'%';
-				
+
 				row = dashboard.grid[r];
 				var numCols = row.length;
 				for (var c = 0; c < numCols; c++) {
@@ -100,6 +100,7 @@
 			
 			document.body.removeChild(document.body.childNodes[0]);
 			document.body.appendChild(mainDiv);
+			document.body.style.fontSize = 'calc(1px + '+(dashboard.fontratio / numRows)+'vh';
 		});
 		// load next dashboard
 		idx++;

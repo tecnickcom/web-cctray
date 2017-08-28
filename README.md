@@ -31,6 +31,7 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
     * **name** : Name of the CI/CD pipeline as reported by cctray.xml.
     * **url** : URL of the cctray.xml file, for example: http://username:password@example.com/cctray.xml
     * **access** : String containing "user:password" for Basic HTTP Authentication.
+    * **fontratio** : Font ratio relative to monitor and row height.
     * **ngrid** : Dashboard layout in rows and columns.
 
 
