@@ -86,7 +86,9 @@
 				var numCols = row.length;
 				for (var c = 0; c < numCols; c++) {
 					var name = row[c];
-
+					if (typeof xitem[name] == 'undefined') {
+						xitem[name] = {"activity":"Sleeping","lastBuildStatus":"Unknown","webUrl":"","lastBuildLabel":"-","lastBuildTime":"-"};
+					}
 					var colDiv = document.createElement('div');
 					colDiv.style.width = ''+(100 / numCols)+'%';
 					colDiv.id = 'col_' + xitem[name].activity;
