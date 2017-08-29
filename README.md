@@ -41,7 +41,7 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
     * **name** : Name of the CI/CD pipeline as reported by cctray.xml.
     * **url** : URL of the cctray.xml file, for example: http://username:password@example.com/cctray.xml
     * **access** : String containing "user:password" for Basic HTTP Authentication.
-    * **fontratio** : Font ratio relative to monitor and row height.
+    * **fontratio** : Font ratio relative to monitor size.
     * **ngrid** : Dashboard layout in rows and columns.
 
 
@@ -62,6 +62,16 @@ The following is a list of CI/CD systems that provides a cctray.xml file:
 * [Snap CI](https://snap-ci.com)
 * [TeamCity](https://www.jetbrains.com/teamcity)
 * [Travis](https://travis-ci.org)
+
+
+## Packages
+
+Pre-built packages are available at:
+
+* DEB : https://bintray.com/tecnickcom/deb/web-cctray
+* RPM : https://bintray.com/tecnickcom/rpm/web-cctray
+
+The application is installed by default in /usr/share/web-cctray
 
 
 ## Getting started (for developers)
