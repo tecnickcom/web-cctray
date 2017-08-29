@@ -125,7 +125,7 @@
 			
 			document.body.removeChild(document.body.childNodes[0]);
 			document.body.appendChild(mainDiv);
-			document.body.style.fontSize = 'calc(1px + '+(dashboard.fontratio / numRows)+'vh)';
+			document.body.style.fontSize = 'calc(1px + '+(dashboard.fontratio)+'vmin)';
 		});
 		// load next dashboard
 		idx++;
