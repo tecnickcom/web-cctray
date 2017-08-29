@@ -2,6 +2,8 @@
 
 *Web-based dashboard for cctray.xml files*
 
+[![Master Build Status](https://secure.travis-ci.org/tecnickcom/web-cctray.png?branch=master)](https://travis-ci.org/tecnickcom/web-cctray?branch=master)
+
 [![Donate via PayPal](https://img.shields.io/badge/donate-paypal-87ceeb.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20web-cctray%20project)
 *Please consider supporting this project by making a donation via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20web-cctray%20project)*
 
