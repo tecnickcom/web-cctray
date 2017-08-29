@@ -19,8 +19,16 @@ This web application displays the build status of projects on a continuous integ
 
 This project can be used directly by opening the `index.html` file in the *src* directory, or it can be packaged and minimized using the tools described below.
 
-The query parameter "d" can be used to specify the configured dashboard to display, otherwise all te dashboards will be displayed in turn.
-For example: `http://example.com/web-cctray/index.html?d=DashboardName`
+### Query parameters:
+
+* **c** : can be used to specify an alternative configuration file name, excluding the ".json" extension.
+* **d** : can be used to specify the configured dashboard to display, otherwise all the dashboards will be displayed in turn.
+* **a** : can be used to display only the pipelines with the selected activity status. Valid values are: all, Sleeping, Building, CheckingModifications, Pending.
+* **s** : can be used to display only the pipelines with the selected build status. Valid values are: all, Success, Failure, Exception, Unknown.
+
+For example: \
+`http://example.com/web-cctray/index.html?c=alternative_config&d=DashboardName`
+
 
 ## Configuration
 

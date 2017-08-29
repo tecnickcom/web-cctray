@@ -11,9 +11,23 @@
 
 (function() {
 
-	// get selected dashboard looking at the "d" URL query value
+	// get input query parameters
 	var urlquery = getUrlQueryParams();
-	var mode = urlquery['d'] === undefined ? 'rotate' : urlquery['d'];
+
+	// "c" can be used to specify an alternative configuration file name, excluding the ".json" extension.
+	var configfile = urlquery['c'] === undefined ? 'config' : urlquery['c'];
+
+	// "d" can be used to specify the configured dashboard to display, otherwise all the dashboards will be displayed in turn.
+	var pipeline = urlquery['d'] === undefined ? 'all' : urlquery['d'];
+
+	// "a" can be used to display only the pipelines with the selected activity status.
+	// Valid values are: all, Sleeping, Building, CheckingModifications, Pending.
+	var activity = urlquery['a'] === undefined ? 'all' : urlquery['a'];
+
+	// "s" can be used to display only the pipelines with the selected build status.
+	// Valid values are: all, Success, Failure, Exception, Unknown
+	var status = urlquery['s'] === undefined ? 'all' : urlquery['s'];
+	
 
 	function decodeComp(s) {
 		return decodeURIComponent(s.replace(/\+/g, ' '));
@@ -85,20 +99,28 @@
 
 				row = dashboard.grid[r];
 				var numCols = row.length;
+				var numValid = 0;
 				for (var c = 0; c < numCols; c++) {
 					var name = row[c];
 					if (typeof xitem[name] == 'undefined') {
 						xitem[name] = {"activity":"Sleeping","lastBuildStatus":"Unknown","webUrl":"","lastBuildLabel":"-","lastBuildTime":"-"};
 					}
+					if (((activity != 'all') && (xitem[name].activity != activity)) || ((status != 'all') && (xitem[name].lastBuildStatus != status))) {
+						continue;
+					}
 					var colDiv = document.createElement('div');
-					colDiv.style.width = ''+(100 / numCols)+'%';
 					colDiv.id = 'col_' + xitem[name].activity;
 					colDiv.className = 'status_'+xitem[name].lastBuildStatus;
 					colDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName">'+name+'</a><br/><span class="label"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span> - <span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
 					rowDiv.appendChild(colDiv);
+					numValid ++
 				}
-				
-				mainDiv.appendChild(rowDiv);
+				if (numValid > 0) {
+					for(var child=rowDiv.firstChild; child!==null; child=child.nextSibling) {
+						child.style.width = ''+(100 / numValid)+'%';
+					}
+					mainDiv.appendChild(rowDiv);
+				}
 			}
 			
 			document.body.removeChild(document.body.childNodes[0]);
@@ -113,13 +135,13 @@
 		setTimeout(loadDashboard, delay, config, dlist, idx, max, delay);
 	}
 
-	loadRemoteURL('config/config.json', '', 'application/json', function(cfg) {
+	loadRemoteURL('config/'+configfile+'.json', '', 'application/json', function(cfg) {
 		var config = JSON.parse(cfg);
 		var numDashboards = config.dashboard.length;
 		// select dashboards to display
 		var dlist = [];
 		for (var i = 0; i < numDashboards; i++) {
-			if ((mode == 'rotate') || (config.dashboard[i]['name'] == mode)) {
+			if ((pipeline == 'all') || (config.dashboard[i]['name'] == pipeline)) {
 				dlist.push(i);
 			}
 		}
