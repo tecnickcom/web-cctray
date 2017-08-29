@@ -90,16 +90,16 @@
 			mainDiv.className = 'main';
 			
 			var numRows = dashboard.grid.length;
+			var numValidRows = 0;
 			for (var r = 0; r < numRows; r++) {
 				
 				var rowDiv = document.createElement('div');
 				rowDiv.id = 'row_' + r;
 				rowDiv.className = 'row';
-				rowDiv.style.height = ''+(100 / numRows)+'%';
 
 				row = dashboard.grid[r];
 				var numCols = row.length;
-				var numValid = 0;
+				var numValidCols = 0;
 				for (var c = 0; c < numCols; c++) {
 					var name = row[c];
 					if (typeof xitem[name] == 'undefined') {
@@ -113,16 +113,23 @@
 					colDiv.className = 'status_'+xitem[name].lastBuildStatus;
 					colDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName">'+name+'</a><br/><span class="label"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span> - <span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
 					rowDiv.appendChild(colDiv);
-					numValid ++
+					numValidCols ++
 				}
-				if (numValid > 0) {
+				if (numValidCols > 0) {
 					for(var child=rowDiv.firstChild; child!==null; child=child.nextSibling) {
-						child.style.width = ''+(100 / numValid)+'%';
+						child.style.width = ''+(100 / numValidCols)+'%';
 					}
+					numValidRows++;
 					mainDiv.appendChild(rowDiv);
 				}
 			}
-			
+			if (numValidRows > 0) {
+				var rowHeight = ''+(100 / numValidRows)+'%';
+				for(var child=mainDiv.firstChild; child!==null; child=child.nextSibling) {
+					child.style.height = rowHeight;
+				}
+			}
+
 			document.body.removeChild(document.body.childNodes[0]);
 			document.body.appendChild(mainDiv);
 			document.body.style.fontSize = 'calc(1px + '+(dashboard.fontratio)+'vmin)';
