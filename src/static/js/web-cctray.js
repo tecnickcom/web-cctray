@@ -40,11 +40,12 @@
 			}
 		}
 		xhr.overrideMimeType(mime);
-		xhr.open('GET', url, true);
+		xhr.open('GET', url + '?_=' + new Date().getTime(), true);
 		xhr.withCredentials = true;
 		if (access) {
 			xhr.setRequestHeader('Authorization', 'Basic '+btoa(access));
 		}
+		xhr.setRequestHeader('Cache-Control', 'no-cache');
 		xhr.send();
 	}
 
