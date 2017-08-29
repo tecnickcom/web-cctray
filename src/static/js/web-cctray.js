@@ -94,7 +94,7 @@
 					colDiv.style.width = ''+(100 / numCols)+'%';
 					colDiv.id = 'col_' + xitem[name].activity;
 					colDiv.className = 'status_'+xitem[name].lastBuildStatus;
-					colDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName">'+name+'</a><br/><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span> - <span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span>';
+					colDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName">'+name+'</a><br/><span class="label"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span> - <span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
 					rowDiv.appendChild(colDiv);
 				}
 				
@@ -103,7 +103,7 @@
 			
 			document.body.removeChild(document.body.childNodes[0]);
 			document.body.appendChild(mainDiv);
-			document.body.style.fontSize = 'calc(1px + '+(dashboard.fontratio / numRows)+'vh';
+			document.body.style.fontSize = 'calc(1px + '+(dashboard.fontratio / numRows)+'vh)';
 		});
 		// load next dashboard
 		idx++;

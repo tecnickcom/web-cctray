@@ -104,6 +104,10 @@ div.row div {
 	text-decoration: none;
 }
 
+.label {
+	font-size: 60%;
+}
+
 .lastBuildLabel {
 }
 
