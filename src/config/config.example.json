@@ -1,11 +1,11 @@
 {
-  "refresh": 30,
+  "refresh": 10,
   "dashboard": [
     {
       "name": "demo1",
       "url": "http://localhost/cctray.example.xml",
       "access": "user:password",
-      "fontratio": 6,
+      "fontratio": 2,
       "grid": [
         [
           "build-linux :: build-non-server",
@@ -20,7 +20,7 @@
       "name": "demo2",
       "url": "http://localhost/cctray.example.xml",
       "access": "",
-      "fontratio": 8,
+      "fontratio": 2,
       "grid": [
         [
           "build-linux :: build-non-server :: util",
