@@ -31,6 +31,7 @@ addons:
     - dh-make
 
 script:
+  - echo $TRAVIS_BUILD_NUMBER > RELEASE
   - make deps
   - make build
 
