@@ -137,6 +137,7 @@ div.row div {
 
 .label {
 	font-size: 60%;
+	text-shadow: 1px 1px 1px #000000;
 }
 
 .lastBuildLabel {
