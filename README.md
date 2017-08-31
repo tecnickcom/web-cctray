@@ -86,3 +86,46 @@ To build the project (requires node):
 ```
 make deps build
 ```
+
+## Notes
+
+### Example of nginx configuration as TLS termination proxy for the CI/CD system.
+
+In this example *web-cctray* and CI/CD system (GoCD) are installed in the same server.
+The CORS (*cross-origin resource sharing*) settings are there in case you want install *web-cctray* in a diffrent server.
+You should replace ```<YOUR_SERVER_NAME>``` with your own server name (e.g. "example.com"), set the correct URL to the CI/CD system
+(in this example: ```http://localhost:8153/```) and the *cctray.xml* full URL (in this example: ```http://localhost:8153/go/cctray.xml```).
+
+```
+server {
+	listen 443;
+	ssl on;
+	ssl_certificate /etc/letsencrypt/live/<YOUR_SERVER_NAME>/cert.pem;
+	ssl_certificate_key /etc/letsencrypt/live/<YOUR_SERVER_NAME>/privkey.pem;
+	server_name <YOUR_SERVER_NAME>;
+	server_tokens off;
+	location /web-cctray {
+		root /usr/share;
+		index index.html;
+		access_log off;
+		expires 0;
+		add_header Cache-Control private;
+		sendfile  off;
+		try_files $uri $uri/ =404;
+	}
+	location / {
+		proxy_pass http://localhost:8153/;
+	}
+	location = /go/cctray.xml {
+		# CORS settings
+		more_set_headers 'Access-Control-Allow-Origin: $http_origin';
+		more_set_headers 'Access-Control-Allow-Methods: GET, OPTIONS';
+		more_set_headers 'Access-Control-Allow-Credentials: true';
+		more_set_headers 'Access-Control-Allow-Headers: Origin,Authorization,Cache-Control,X-Requested-With,Content-Type,Accept,Credentials';
+		if ($request_method = OPTIONS) {
+			return 200;
+		}
+		proxy_pass http://localhost:8153/go/cctray.xml;
+	}
+}
+```
