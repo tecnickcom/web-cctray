@@ -116,7 +116,7 @@
 			var r = 0;
 			var name = '';
 			var backgroundClass = '';
-			for (var p = 0; p < dashboard.pipeline.length; p++) {
+			for (var p = 0; p < numPipelines; p++) {
 				if ((p % numCols) == 0) {
 					if (typeof(rowDiv) === 'object') {
 						mainDiv.appendChild(rowDiv);
@@ -148,7 +148,9 @@
 				colDiv.appendChild(pipDiv);
 				rowDiv.appendChild(colDiv);
 			}
-			mainDiv.appendChild(rowDiv);
+			if (typeof(rowDiv) === 'object') {
+				mainDiv.appendChild(rowDiv);
+			}
 			document.body.removeChild(document.body.childNodes[0]);
 			document.body.appendChild(mainDiv);
 		});
