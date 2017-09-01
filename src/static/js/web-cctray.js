@@ -84,56 +84,75 @@
 		dashboard = config.dashboard[dlist[idx]];
 		loadRemoteURL(dashboard.url, dashboard.access, 'application/xml', function(ctx) {
 			xitem = parseCctray(ctx);
-			
+
 			var mainDiv = document.createElement('div');
 			mainDiv.id = 'main';
 			mainDiv.className = 'main';
-			
-			var numRows = dashboard.grid.length;
-			var numValidRows = 0;
-			for (var r = 0; r < numRows; r++) {
-				
-				var rowDiv = document.createElement('div');
-				rowDiv.id = 'row_' + r;
-				rowDiv.className = 'row';
 
-				row = dashboard.grid[r];
-				var numCols = row.length;
-				var numValidCols = 0;
-				for (var c = 0; c < numCols; c++) {
-					var name = row[c];
-					if (typeof xitem[name] == 'undefined') {
-						xitem[name] = {"activity":"Sleeping","lastBuildStatus":"Unknown","webUrl":"","lastBuildLabel":"-","lastBuildTime":"-"};
-					}
-					if (((activity != 'all') && (xitem[name].activity != activity)) || ((status != 'all') && (xitem[name].lastBuildStatus != status))) {
-						continue;
-					}
-					var colDiv = document.createElement('div');
-					colDiv.id = 'col_' + xitem[name].activity;
-					colDiv.className = 'status_'+xitem[name].lastBuildStatus;
-					colDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName">'+name+'</a><br/><span class="label"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span> - <span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
-					rowDiv.appendChild(colDiv);
-					numValidCols ++
+			// select pipelines to display
+			var pipeline = [];
+			for (var p = 0; p < dashboard.pipeline.length; p++) {
+				var name = dashboard.pipeline[p];
+				if (typeof xitem[name] == 'undefined') {
+					xitem[name] = {"activity":"Sleeping","lastBuildStatus":"Unknown","webUrl":"","lastBuildLabel":"-","lastBuildTime":"-"};
 				}
-				if (numValidCols > 0) {
-					for(var child=rowDiv.firstChild; child!==null; child=child.nextSibling) {
-						child.style.width = ''+(100 / numValidCols)+'%';
-					}
-					numValidRows++;
-					mainDiv.appendChild(rowDiv);
+				if (((activity != 'all') && (xitem[name].activity != activity)) || ((status != 'all') && (xitem[name].lastBuildStatus != status))) {
+					continue;
 				}
-			}
-			if (numValidRows > 0) {
-				var rowHeight = ''+(100 / numValidRows)+'%';
-				for(var child=mainDiv.firstChild; child!==null; child=child.nextSibling) {
-					child.style.height = rowHeight;
-				}
+				pipeline.push(name);
 			}
 
+			// calculate grid size
+			var numPipelines = pipeline.length;
+			var gridRatio = dashboard.boxratio * window.innerHeight / window.innerWidth;
+			var numCols = Math.round(Math.sqrt(numPipelines / gridRatio));
+			var numRows = Math.ceil(numPipelines / numCols);
+			var rowHeight = Math.round(window.innerHeight / numRows);
+			var colWidth = Math.round(window.innerWidth / numCols);
+
+			var rowDiv;
+			var colDiv;
+			var setCols = 0; // number of pipelines in the current row
+			var r = 0;
+			var name = '';
+			var backgroundClass = '';
+			for (var p = 0; p < dashboard.pipeline.length; p++) {
+				if ((p % numCols) == 0) {
+					if (typeof(rowDiv) === 'object') {
+						mainDiv.appendChild(rowDiv);
+					}
+					r++;
+					rowDiv = document.createElement('div');
+					rowDiv.id = 'row_' + r;
+					rowDiv.className = 'row';
+					rowDiv.style.height = rowHeight+'px';
+					setCols = 0;
+				}
+				var name = pipeline[p];
+				setCols++;
+				colDiv = document.createElement('div');
+				colDiv.className = 'box';
+				colDiv.style.width = colWidth+'px';
+				colDiv.style.height = rowHeight+'px';
+				pipDiv = document.createElement('div');
+				nameFontSize = (1 + Math.round(1.3*colWidth/name.length));
+				labelFontSize = Math.min((0.8 * nameFontSize), (1 + Math.round(1.3*colWidth/(xitem[name].lastBuildLabel.length+xitem[name].lastBuildTime.length+3))));
+				pipDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName" style="font-size:'+nameFontSize+'px;">'+name+'</a><br/><span class="label" style="font-size:'+labelFontSize+'px;"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span><br/><span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
+				if (xitem[name].activity == 'Building') {
+					backgroundClass = 'background_'+xitem[name].activity;
+				} else {
+					backgroundClass = 'background_'+xitem[name].lastBuildStatus;
+				}
+				pipDiv.className = 'border_'+xitem[name].lastBuildStatus+' '+backgroundClass;
+				pipDiv.style.borderWidth = (1 + Math.round(Math.min(rowHeight,colWidth)/10))+'px';
+				colDiv.appendChild(pipDiv);
+				rowDiv.appendChild(colDiv);
+			}
+			mainDiv.appendChild(rowDiv);
 			document.body.removeChild(document.body.childNodes[0]);
 			document.body.appendChild(mainDiv);
-			document.body.style.fontSize = 'calc(6px + '+(dashboard.fontratio)+'vmin)';
 		});
+
 		// load next dashboard
 		idx++;
 		if (idx > max) {
@@ -152,7 +171,8 @@
 				dlist.push(i);
 			}
 		}
-		loadDashboard(config, dlist, 0, (dlist.length - 1), (config.refresh * 1000))
+		// load first dashboard
+		loadDashboard(config, dlist, 0, (dlist.length - 1), (config.refresh * 1000));
 	});
 
 })();

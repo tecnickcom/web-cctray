@@ -38,12 +38,48 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
 
 * **refresh** : Number of seconds to wait before refreshing the page.
 * **dashboard** : Array of dashboards. It is possible to define multiple dashboards.
-    * **name** : Name of the CI/CD pipeline as reported by cctray.xml.
+    * **name** : Generic name.
     * **url** : URL of the cctray.xml file, for example: http://username:password@example.com/cctray.xml
     * **access** : String containing "user:password" for Basic HTTP Authentication.
-    * **fontratio** : Font ratio relative to monitor size.
-    * **ngrid** : Dashboard layout in rows and columns.
+    * **boxration** : Default width/height ratio for a pipeline box.
+    * **pipeline** : List of the CI/CD pipeline names as reported by cctray.xml.
 
+### Configuration example
+
+```
+{
+  "refresh": 10,
+  "dashboard": [
+    {
+      "name": "demo1",
+      "url": "http://localhost/cctray.example.xml",
+      "access": "user:password",
+      "boxratio": 2,
+      "pipeline": [
+        "build-linux :: build-non-server",
+        "build-linux :: build-non-server :: agent",
+        "build-linux :: build-non-server :: agent-bootstrapper"
+      ]
+    },
+    {
+      "name": "demo2",
+      "url": "http://localhost/cctray.example.xml",
+      "access": "",
+      "boxratio": 2,
+      "pipeline": [
+        "build-linux :: build-non-server :: util",
+        "plugins :: build",
+        "gocd-docs.go.cd-release-16.6.0 :: Build :: build_job",
+        "UploadInstallers :: UploadInstallers",
+        "github-oauth-authorization-plugin-PR :: build",
+        "gocd-docs.go.cd-release-16.9.0 :: PushToGHPages :: pushtoghpages_job",
+        "gocd-docs.go.cd-release-16.5.0 :: PushToGHPages",
+        "docs.go.cd-release-17.7.0 :: PushToGHPages"
+      ]
+    }
+  ]
+}
+```
 
 ## Supported CI/CD systems
 
