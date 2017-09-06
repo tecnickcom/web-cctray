@@ -92,7 +92,7 @@
 			// select pipelines to display
 			var pipeline = [];
 
-			if (dashboard.pipeline[0].name == "all") {
+			if (dashboard.pipeline[0] == "all") {
 				// import all pipelines specified in cctray.xml
 				dashboard.pipeline = Object.keys(xitem);
 			}
