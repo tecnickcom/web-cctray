@@ -91,6 +91,12 @@
 
 			// select pipelines to display
 			var pipeline = [];
+
+			if (dashboard.pipeline[0].name == "all") {
+				// import all pipelines specified in cctray.xml
+				dashboard.pipeline = Object.keys(xitem);
+			}
+
 			for (var p = 0; p < dashboard.pipeline.length; p++) {
 				var name = dashboard.pipeline[p];
 				if (typeof xitem[name] == 'undefined') {

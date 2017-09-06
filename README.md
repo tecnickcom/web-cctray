@@ -26,8 +26,11 @@ This project can be used directly by opening the `index.html` file in the *src* 
 * **a** : can be used to display only the pipelines with the selected activity status. Valid values are: all, Sleeping, Building, CheckingModifications, Pending.
 * **s** : can be used to display only the pipelines with the selected build status. Valid values are: all, Success, Failure, Exception, Unknown.
 
-For example: \
-`http://example.com/web-cctray/index.html?c=alternative_config&d=DashboardName`
+#### Examples:
+
+* `http://example.com/web-cctray/index.html?c=alternative_config&d=DashboardName`
+* `http://example.com/web-cctray/index.html?c=config-all&s=Failure`
+* `http://example.com/web-cctray/index.html?c=config-all&a=Building&s=Failure`
 
 
 ## Configuration
@@ -42,7 +45,7 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
     * **url** : URL of the cctray.xml file, for example: http://username:password@example.com/cctray.xml
     * **access** : String containing "user:password" for Basic HTTP Authentication.
     * **boxration** : Default width/height ratio for a pipeline box.
-    * **pipeline** : List of the CI/CD pipeline names as reported by cctray.xml.
+    * **pipeline** : List of the CI/CD pipeline names as reported by cctray.xml, or the word "all" to import all pipelines specified in cctray.xml.
 
 ### Configuration example
 
@@ -75,6 +78,15 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
         "gocd-docs.go.cd-release-16.9.0 :: PushToGHPages :: pushtoghpages_job",
         "gocd-docs.go.cd-release-16.5.0 :: PushToGHPages",
         "docs.go.cd-release-17.7.0 :: PushToGHPages"
+      ]
+    },
+    {
+      "name": "demo3",
+      "url": "http://localhost/cctray.example.xml",
+      "access": "",
+      "boxratio": 2,
+      "pipeline": [
+        "all",
       ]
     }
   ]
