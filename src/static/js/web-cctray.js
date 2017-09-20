@@ -183,5 +183,8 @@
 		loadDashboard(config, dlist, 0, (dlist.length - 1), (config.refresh * 1000));
 	});
 
-})();
+	window.addEventListener('resize', function() {
+		this.location.href = this.location.href;
+	});
 
+})();
