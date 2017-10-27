@@ -138,16 +138,16 @@
 				}
 				var name = pipeline[p];
 				var title = name.replace(stripname, '');
-				
+				var titleFontRatio = (getStringLengthRatio(title) / (7 * title.length));
 				setCols++;
 				colDiv = document.createElement('div');
 				colDiv.className = 'box';
 				colDiv.style.width = colWidth+'px';
 				colDiv.style.height = rowHeight+'px';
 				pipDiv = document.createElement('div');
-				nameFontSize = (1 + Math.round(1.3*colWidth/title.length));
-				labelFontSize = Math.min((0.8 * nameFontSize), (1 + Math.round(1.3*colWidth/(xitem[name].lastBuildLabel.length+xitem[name].lastBuildTime.length+3))));
-				pipDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName" style="font-size:'+nameFontSize+'px;">'+title+'</a><br/><span class="label" style="font-size:'+labelFontSize+'px;"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span><br/><span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
+				titleFontSize = Math.min((rowHeight/5), (Math.round(colWidth / (titleFontRatio * title.length))));
+				labelFontSize = Math.min((0.8 * titleFontSize), (1 + Math.round(1.3*colWidth/(xitem[name].lastBuildLabel.length+xitem[name].lastBuildTime.length+3))));
+				pipDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName" style="font-size:'+titleFontSize+'px;">'+title+'</a><br/><span class="label" style="font-size:'+labelFontSize+'px;"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span><br/><span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
 				if (xitem[name].activity == 'Building') {
 					backgroundClass = 'background_'+xitem[name].activity;
 				} else {
@@ -190,5 +190,12 @@
 	window.addEventListener('resize', function() {
 		this.location.href = this.location.href;
 	});
+
+	function getStringLengthRatio(str) {
+		this.element = document.createElement('canvas');
+		this.context = this.element.getContext("2d");
+		this.context.font = "10px Arial";
+		return this.context.measureText(str).width;
+	}
 
 })();
