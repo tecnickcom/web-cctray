@@ -25,12 +25,13 @@ This project can be used directly by opening the `index.html` file in the *src* 
 * **d** : can be used to specify the configured dashboard to display, otherwise all the dashboards will be displayed in turn.
 * **a** : can be used to display only the pipelines with the selected activity status. Valid values are: all, Sleeping, Building, CheckingModifications, Pending.
 * **s** : can be used to display only the pipelines with the selected build status. Valid values are: all, Success, Failure, Exception, Unknown.
+* **x** : can be used to remove the specified substring from the pipeline name.
 
 #### Examples:
 
 * `http://example.com/web-cctray/index.html?c=alternative_config&d=DashboardName`
 * `http://example.com/web-cctray/index.html?c=config-all&s=Failure`
-* `http://example.com/web-cctray/index.html?c=config-all&a=Building&s=Failure`
+* `http://example.com/web-cctray/index.html?c=config-all&a=Building&s=Failure&x=%20::%20Default`
 
 
 ## Configuration

@@ -27,7 +27,9 @@
 	// "s" can be used to display only the pipelines with the selected build status.
 	// Valid values are: all, Success, Failure, Exception, Unknown
 	var status = urlquery['s'] === undefined ? 'all' : urlquery['s'];
-	
+
+	// "x" can be used to remove the specified substring from the pipeline name
+	var stripname = urlquery['x'] === undefined ? '' : urlquery['x'];
 
 	function decodeComp(s) {
 		return decodeURIComponent(s.replace(/\+/g, ' '));
@@ -135,6 +137,8 @@
 					setCols = 0;
 				}
 				var name = pipeline[p];
+				var title = name.replace(stripname, '');
+				
 				setCols++;
 				colDiv = document.createElement('div');
 				colDiv.className = 'box';
@@ -143,7 +147,7 @@
 				pipDiv = document.createElement('div');
 				nameFontSize = (1 + Math.round(1.3*colWidth/name.length));
 				labelFontSize = Math.min((0.8 * nameFontSize), (1 + Math.round(1.3*colWidth/(xitem[name].lastBuildLabel.length+xitem[name].lastBuildTime.length+3))));
-				pipDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName" style="font-size:'+nameFontSize+'px;">'+name+'</a><br/><span class="label" style="font-size:'+labelFontSize+'px;"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span><br/><span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
+				pipDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName" style="font-size:'+nameFontSize+'px;">'+title+'</a><br/><span class="label" style="font-size:'+labelFontSize+'px;"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span><br/><span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
 				if (xitem[name].activity == 'Building') {
 					backgroundClass = 'background_'+xitem[name].activity;
 				} else {
