@@ -145,7 +145,7 @@
 				colDiv.style.width = colWidth+'px';
 				colDiv.style.height = rowHeight+'px';
 				pipDiv = document.createElement('div');
-				nameFontSize = (1 + Math.round(1.3*colWidth/name.length));
+				nameFontSize = (1 + Math.round(1.3*colWidth/title.length));
 				labelFontSize = Math.min((0.8 * nameFontSize), (1 + Math.round(1.3*colWidth/(xitem[name].lastBuildLabel.length+xitem[name].lastBuildTime.length+3))));
 				pipDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName" style="font-size:'+nameFontSize+'px;">'+title+'</a><br/><span class="label" style="font-size:'+labelFontSize+'px;"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span><br/><span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
 				if (xitem[name].activity == 'Building') {
