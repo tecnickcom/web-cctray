@@ -156,3 +156,9 @@ div.box div {
 	-webkit-background-size: 4vmin 4vmin;
 	background-size:4vmin 4vmin;
 }
+
+.external {
+	width: 100%;
+	height: 100%;
+	overflow:hidden;
+}

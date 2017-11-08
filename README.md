@@ -89,6 +89,15 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
       "pipeline": [
         "all",
       ]
+    },
+    {
+      "name": "demo4",
+      "url": "http://localhost/cctray.example.xml",
+      "access": "",
+      "boxratio": 2,
+      "pipeline": [
+        "*http://www.exampe.com/external_page.html",
+      ]
     }
   ]
 }

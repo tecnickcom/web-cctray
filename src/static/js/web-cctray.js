@@ -102,7 +102,12 @@
 			for (var p = 0; p < dashboard.pipeline.length; p++) {
 				var name = dashboard.pipeline[p];
 				if (typeof xitem[name] == 'undefined') {
-					xitem[name] = {"activity":"Sleeping","lastBuildStatus":"Unknown","webUrl":"","lastBuildLabel":"-","lastBuildTime":"-"};
+					if (name[0] == "*") {
+						// external URL content
+						xitem[name] = {"activity":"url","webUrl":name.substr(1)};
+					} else {
+						xitem[name] = {"activity":"Sleeping","lastBuildStatus":"Unknown","webUrl":"","lastBuildLabel":"-","lastBuildTime":"-"};
+					}
 				}
 				if (((activity != 'all') && (xitem[name].activity != activity)) || ((status != 'all') && (xitem[name].lastBuildStatus != status))) {
 					continue;
@@ -145,16 +150,21 @@
 				colDiv.style.width = colWidth+'px';
 				colDiv.style.height = rowHeight+'px';
 				pipDiv = document.createElement('div');
-				titleFontSize = Math.min((rowHeight/5), (Math.round(colWidth / (titleFontRatio * title.length))));
-				labelFontSize = Math.min((0.8 * titleFontSize), (1 + Math.round(1.3*colWidth/(xitem[name].lastBuildLabel.length+xitem[name].lastBuildTime.length+3))));
-				pipDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName" style="font-size:'+titleFontSize+'px;">'+title+'</a><br/><span class="label" style="font-size:'+labelFontSize+'px;"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span><br/><span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
-				if (xitem[name].activity == 'Building') {
-					backgroundClass = 'background_'+xitem[name].activity;
+				if (xitem[name].activity == 'url') {
+					// external URL content
+					pipDiv.innerHTML='<iframe class="external" src="'+xitem[name].webUrl+'"></iframe>';
 				} else {
-					backgroundClass = 'background_'+xitem[name].lastBuildStatus;
+					titleFontSize = Math.min((rowHeight/5), (Math.round(colWidth / (titleFontRatio * title.length))));
+					labelFontSize = Math.min((0.8 * titleFontSize), (1 + Math.round(1.3*colWidth/(xitem[name].lastBuildLabel.length+xitem[name].lastBuildTime.length+3))));
+					pipDiv.innerHTML = '<span id="info"><a href="'+xitem[name].webUrl+'" class="pipelineName" style="font-size:'+titleFontSize+'px;">'+title+'</a><br/><span class="label" style="font-size:'+labelFontSize+'px;"><span class="lastBuildLabel">'+xitem[name].lastBuildLabel+'</span><br/><span class="lastBuildTime">'+xitem[name].lastBuildTime+'</span></span></span>';
+					if (xitem[name].activity == 'Building') {
+						backgroundClass = 'background_'+xitem[name].activity;
+					} else {
+						backgroundClass = 'background_'+xitem[name].lastBuildStatus;
+					}
+					pipDiv.className = 'border_'+xitem[name].lastBuildStatus+' '+backgroundClass;
+					pipDiv.style.borderWidth = (1 + Math.round(Math.min(rowHeight,colWidth)/10))+'px';
 				}
-				pipDiv.className = 'border_'+xitem[name].lastBuildStatus+' '+backgroundClass;
-				pipDiv.style.borderWidth = (1 + Math.round(Math.min(rowHeight,colWidth)/10))+'px';
 				colDiv.appendChild(pipDiv);
 				rowDiv.appendChild(colDiv);
 			}
