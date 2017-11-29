@@ -1,6 +1,6 @@
 language: node_js
 
-dist: trusty
+dist: xenial
 
 sudo: true
 
@@ -13,11 +13,8 @@ branches:
     - master
     - develop
 
-node_js:
-  - node
-
 before_install:
-  - sudo apt-get update || true
+  - sudo curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -
 
 addons:
   apt:
@@ -29,6 +26,7 @@ addons:
     - alien
     - rpm
     - dh-make
+    - nodejs
 
 script:
   - echo $TRAVIS_BUILD_NUMBER > RELEASE
