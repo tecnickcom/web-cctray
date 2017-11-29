@@ -109,7 +109,7 @@
 						xitem[name] = {"activity":"Sleeping","lastBuildStatus":"Unknown","webUrl":"","lastBuildLabel":"-","lastBuildTime":"-"};
 					}
 				}
-				if (((activity != 'all') && (xitem[name].activity != activity)) || ((status != 'all') && (xitem[name].lastBuildStatus != status))) {
+				if ((xitem[name].activity != "url") && (((activity != 'all') && (xitem[name].activity != activity)) || ((status != 'all') && (xitem[name].lastBuildStatus != status)))) {
 					continue;
 				}
 				pipeline.push(name);
