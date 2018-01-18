@@ -40,19 +40,21 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
 
 ### Configuration fields:
 
-* **refresh** : Number of seconds to wait before refreshing the page.
+* **refresh**   : Number of seconds to wait before refreshing the page.
+* **blank**     : URL of the resource to display in case of blank dashboard (no pipelines to display)
 * **dashboard** : Array of dashboards. It is possible to define multiple dashboards.
-    * **name** : Generic name.
-    * **url** : URL of the cctray.xml file, for example: http://username:password@example.com/cctray.xml
-    * **access** : String containing "user:password" for Basic HTTP Authentication.
+    * **name**      : Generic name.
+    * **url**       : URL of the cctray.xml file, for example: http://username:password@example.com/cctray.xml
+    * **access**    : String containing "user:password" for Basic HTTP Authentication.
     * **boxration** : Default width/height ratio for a pipeline box.
-    * **pipeline** : List of the CI/CD pipeline names as reported by cctray.xml, or the word "all" to import all pipelines specified in cctray.xml.
+    * **pipeline**  : List of the CI/CD pipeline names as reported by cctray.xml, or the word "all" to import all pipelines specified in cctray.xml.
 
 ### Configuration example
 
 ```
 {
   "refresh": 10,
+  "blank": "https://www.example.com/page_to_display_in_case_of_blank_dashboard.html"
   "dashboard": [
     {
       "name": "demo1",

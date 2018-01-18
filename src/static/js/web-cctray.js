@@ -82,7 +82,7 @@
 		return obj;
 	}
 
-	function loadDashboard(config, dlist, idx, max, delay) {
+	function loadDashboard(config, dlist, idx, max, delay, blank) {
 		dashboard = config.dashboard[dlist[idx]];
 		loadRemoteURL(dashboard.url, dashboard.access, 'application/xml', function(ctx) {
 			xitem = parseCctray(ctx);
@@ -117,6 +117,11 @@
 
 			// calculate grid size
 			var numPipelines = pipeline.length;
+			if ((numPipelines == 0) && (blank !== undefined) && (blank !== "")) {
+				xitem['blank'] = {"activity":"url","webUrl":blank};
+				pipeline.push('blank');
+				numPipelines = 1;
+			}
 			var gridRatio = dashboard.boxratio * window.innerHeight / window.innerWidth;
 			var numCols = Math.round(Math.sqrt(numPipelines / gridRatio));
 			var numRows = Math.ceil(numPipelines / numCols);
@@ -180,11 +185,12 @@
 		if (idx > max) {
 			idx = 0;
 		}
-		setTimeout(loadDashboard, delay, config, dlist, idx, max, delay);
+		setTimeout(loadDashboard, delay, config, dlist, idx, max, delay, blank);
 	}
 
 	loadRemoteURL('config/'+configfile+'.json', '', 'application/json', function(cfg) {
 		var config = JSON.parse(cfg);
+		var blank = config.blank;
 		var numDashboards = config.dashboard.length;
 		// select dashboards to display
 		var dlist = [];
@@ -194,7 +200,7 @@
 			}
 		}
 		// load first dashboard
-		loadDashboard(config, dlist, 0, (dlist.length - 1), (config.refresh * 1000));
+		loadDashboard(config, dlist, 0, (dlist.length - 1), (config.refresh * 1000), blank);
 	});
 
 	window.addEventListener('resize', function() {

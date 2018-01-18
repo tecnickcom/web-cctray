@@ -1,5 +1,6 @@
 {
   "refresh": 10,
+  "blank": "https://technick.net/img/guide_software_metrics/io_graph.png",
   "dashboard": [
     {
       "name": "demo1",
