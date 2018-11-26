@@ -9,7 +9,7 @@
 
 * **category**    Web Application
 * **author**      Nicola Asuni <info@tecnick.com>
-* **copyright**   2013-2017 Nicola Asuni - Tecnick.com LTD
+* **copyright**   2013-2018 Nicola Asuni - Tecnick.com LTD
 * **license**     MIT (see LICENSE)
 * **link**        https://github.com/tecnickcom/web-cctray
 
