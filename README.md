@@ -9,7 +9,7 @@
 
 * **category**    Web Application
 * **author**      Nicola Asuni <info@tecnick.com>
-* **copyright**   2013-2018 Nicola Asuni - Tecnick.com LTD
+* **copyright**   2013-2019 Nicola Asuni - Tecnick.com LTD
 * **license**     MIT (see LICENSE)
 * **link**        https://github.com/tecnickcom/web-cctray
 
@@ -19,17 +19,21 @@ This web application displays the build status of projects on a continuous integ
 
 This project can be used directly by opening the `index.html` file in the *src* directory, or it can be packaged and minimized using the tools described below.
 
-### Query parameters:
+![web-cctray screenshot](resources/screenshot.png "web-cctray screenshot")
+
+
+### Otional query parameters:
 
 * **c** : can be used to specify an alternative configuration file name, excluding the ".json" extension.
 * **d** : can be used to specify the configured dashboard to display, otherwise all the dashboards will be displayed in turn.
-* **a** : can be used to display only the pipelines with the selected activity status. Valid values are: all, Sleeping, Building, CheckingModifications, Pending.
-* **s** : can be used to display only the pipelines with the selected build status. Valid values are: all, Success, Failure, Exception, Unknown.
-* **x** : can be used to remove the specified substring from the pipeline name.
+* **a** : comma-separated list of activities to filter. Valid values are: Sleeping, Building, CheckingModifications, Pending.
+* **s** : comma-separated list of statuses to filter. Valid values are: Success, Failure, Exception, Unknown.
+* **x** : comma-separated list of substrings to remove from the the pipeline name.
+* **l** : flag to enable lexicographical order.
 
 #### Examples:
 
-* `http://example.com/web-cctray/index.html?c=alternative_config&d=DashboardName`
+* `http://example.com/web-cctray/index.html?c=alternative_config&d=DashboardName&t=1&l=1`
 * `http://example.com/web-cctray/index.html?c=config-all&s=Failure`
 * `http://example.com/web-cctray/index.html?c=config-all&a=Building&s=Failure&x=%20::%20Default`
 
@@ -48,13 +52,19 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
     * **access**    : String containing "user:password" for Basic HTTP Authentication.
     * **boxration** : Default width/height ratio for a pipeline box.
     * **pipeline**  : List of the CI/CD pipeline names as reported by cctray.xml, or the word "all" to import all pipelines specified in cctray.xml.
+    * **exclude**   : List of the CI/CD pipeline names to exclude.
+    * **activity**  : List of activities to filter. Valid values are: Sleeping, Building, CheckingModifications, Pending.
+    * **status**    : List of statuses to filter. Valid values are: Success, Failure, Exception, Unknown.
+    * **stripname** : List of substrings to remove from the the pipeline name.
+    * **sort**      : Sort the pipelines in lexicographical order when set to true.
+    
 
 ### Configuration example
 
 ```
 {
-  "refresh": 10,
-  "blank": "https://www.example.com/page_to_display_in_case_of_blank_dashboard.html"
+  "refresh": 5,
+  "blank": "https://www.example.com/page_to_display_in_case_of_blank_dashboard.html",
   "dashboard": [
     {
       "name": "demo1",
@@ -88,8 +98,18 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
       "url": "http://localhost/cctray.example.xml",
       "access": "",
       "boxratio": 2,
+      "activity": ["Sleeping", "Building", "CheckingModifications", "Pending"],
+      "status": ["Success", "Failure", "Exception", "Unknown"],
+      "stripname": [" :: ", "build"],
+      "sort": true,
+      "separator": " :: ",
+      "level": 3,
       "pipeline": [
-        "all",
+        "all"
+      ],
+      "exclude": [
+        "gocd-docs.go.cd-release-16.5.0 :: PushToGHPages",
+        "docs.go.cd-release-17.7.0 :: PushToGHPages"
       ]
     },
     {
@@ -98,7 +118,7 @@ Copy, rename and edit the `src/config/config.example.json` to `src/config/config
       "access": "",
       "boxratio": 2,
       "pipeline": [
-        "*http://www.exampe.com/external_page.html",
+        "*http://www.example.com/external_page.html"
       ]
     }
   ]

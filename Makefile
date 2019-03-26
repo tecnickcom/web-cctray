@@ -2,7 +2,7 @@
 #
 # @category    Web Application
 # @author      Nicola Asuni <info@tecnick.com>
-# @copyright   2013-2017 Nicola Asuni - Tecnick.com LTD
+# @copyright   2013-2019 Nicola Asuni - Tecnick.com LTD
 # @license     MIT (see LICENSE)
 # @link        https://github.com/tecnickcom/web-cctray
 #
@@ -98,6 +98,7 @@ deps:
 # Clean the target directory
 clean:
 	rm -rf ./target
+	rm -rf ./vendor
 
 # Build the project
 build:

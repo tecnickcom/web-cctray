@@ -1,5 +1,5 @@
 {
-  "refresh": 10,
+  "refresh": 5,
   "blank": "https://technick.net/img/guide_software_metrics/io_graph.png",
   "dashboard": [
     {
@@ -27,6 +27,32 @@
         "gocd-docs.go.cd-release-16.9.0 :: PushToGHPages :: pushtoghpages_job",
         "gocd-docs.go.cd-release-16.5.0 :: PushToGHPages",
         "docs.go.cd-release-17.7.0 :: PushToGHPages"
+      ]
+    },
+    {
+      "name": "demo3",
+      "url": "http://localhost/cctray.example.xml",
+      "access": "",
+      "boxratio": 2,
+      "activity": ["Sleeping", "Building", "CheckingModifications", "Pending"],
+      "status": ["Failure", "Exception", "Unknown"],
+      "stripname": [],
+      "sort": true,
+      "pipeline": [
+        "all"
+      ],
+      "exclude": [
+        "gocd-docs.go.cd-release-16.5.0 :: PushToGHPages",
+        "docs.go.cd-release-17.7.0 :: PushToGHPages"
+      ]
+    },
+    {
+      "name": "demo4",
+      "url": "http://localhost/cctray.example.xml",
+      "access": "",
+      "boxratio": 2,
+      "pipeline": [
+        "*https://circuitsarchive.org/img/cir_smartcard_comp_ico.jpg"
       ]
     }
   ]

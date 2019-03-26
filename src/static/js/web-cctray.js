@@ -4,7 +4,7 @@
  *
  * @category   Dashboards
  * @author     Nicola Asuni <nicola.asuni@tecnick.com>
- * @copyright  2013-2017 Nicola Asuni - Tecnick.com LTD
+ * @copyright  2013-2019 Nicola Asuni - Tecnick.com LTD
  * @license    MIT (see LICENSE)
  * @link       https://github.com/tecnickcom/web-cctray
  */
@@ -20,16 +20,19 @@
 	// "d" can be used to specify the configured dashboard to display, otherwise all the dashboards will be displayed in turn.
 	var pipeline = urlquery['d'] === undefined ? 'all' : urlquery['d'];
 
-	// "a" can be used to display only the pipelines with the selected activity status.
-	// Valid values are: all, Sleeping, Building, CheckingModifications, Pending.
-	var activity = urlquery['a'] === undefined ? 'all' : urlquery['a'];
+	// "a" comma-separated list of activities to filter.
+	// Valid values are: Sleeping, Building, CheckingModifications, Pending.
+	var activity = urlquery['a'] === undefined ? [] : urlquery['a'].split(',');
 
-	// "s" can be used to display only the pipelines with the selected build status.
-	// Valid values are: all, Success, Failure, Exception, Unknown
-	var status = urlquery['s'] === undefined ? 'all' : urlquery['s'];
+	// "s" comma-separated list of statuses to filter.
+	// Valid values are: Success, Failure, Exception, Unknown
+	var status = urlquery['s'] === undefined ? [] : urlquery['s'].split(',');
 
-	// "x" can be used to remove the specified substring from the pipeline name
-	var stripname = urlquery['x'] === undefined ? '' : urlquery['x'];
+	// "x" comma-separated list of substrings to remove from the the pipeline name.
+	var stripname = urlquery['x'] === undefined ? [] : urlquery['x'].split(',');
+
+	// "l" flag to enable lexicographical order
+	var sort = urlquery['l'] === undefined ? false : ((urlquery['l'] == '1') || (urlquery['l'].toLowerCase() == 'true'));
 
 	function decodeComp(s) {
 		return decodeURIComponent(s.replace(/\+/g, ' '));
@@ -82,6 +85,23 @@
 		return obj;
 	}
 
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
+	function escapeRegExp(str) {
+		return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+	}
+
+	function replaceAll(str, find, replace) {
+		return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+	}
+
+	function cmp(a,b) {
+		var x = a.toLowerCase();
+		var y = b.toLowerCase();
+		if (x < y) {return -1;}
+		if (x > y) {return 1;}
+		return 0;
+	};
+
 	function loadDashboard(config, dlist, idx, max, delay, blank) {
 		dashboard = config.dashboard[dlist[idx]];
 		loadRemoteURL(dashboard.url, dashboard.access, 'application/xml', function(ctx) {
@@ -99,6 +119,32 @@
 				dashboard.pipeline = Object.keys(xitem);
 			}
 
+			if (!dashboard.hasOwnProperty('exclude')) {
+				dashboard.exclude = [];
+			}
+
+			// merge query arguments with configuration parameters
+			if (dashboard.hasOwnProperty('activity')) {
+				dashboard.activity = dashboard.activity.concat(activity);
+			} else {
+				dashboard.activity = activity;
+			}
+			if (dashboard.hasOwnProperty('status')) {
+				dashboard.status = dashboard.status.concat(status);
+			} else {
+				dashboard.status = status;
+			}
+			if (dashboard.hasOwnProperty('stripname')) {
+				dashboard.stripname = dashboard.stripname.concat(stripname);
+			} else {
+				dashboard.stripname = stripname;
+			}
+			if (dashboard.hasOwnProperty('sort')) {
+				dashboard.sort = dashboard.sort || sort;
+			} else {
+				dashboard.sort = sort;
+			}
+
 			for (var p = 0; p < dashboard.pipeline.length; p++) {
 				var name = dashboard.pipeline[p];
 				if (typeof xitem[name] == 'undefined') {
@@ -109,10 +155,14 @@
 						xitem[name] = {"activity":"Sleeping","lastBuildStatus":"Unknown","webUrl":"","lastBuildLabel":"-","lastBuildTime":"-"};
 					}
 				}
-				if ((xitem[name].activity != "url") && (((activity != 'all') && (xitem[name].activity != activity)) || ((status != 'all') && (xitem[name].lastBuildStatus != status)))) {
+				if (dashboard.exclude.includes(name) || ((xitem[name].activity != "url") && ((dashboard.activity.length && (!dashboard.activity.includes(xitem[name].activity))) || (dashboard.status.length && (!dashboard.status.includes(xitem[name].lastBuildStatus)))))) {
 					continue;
 				}
 				pipeline.push(name);
+			}
+
+			if (dashboard.sort) {
+				pipeline.sort(cmp);
 			}
 
 			// calculate grid size
@@ -147,7 +197,10 @@
 					setCols = 0;
 				}
 				var name = pipeline[p];
-				var title = name.replace(stripname, '');
+				var title = name;
+				for(var i in dashboard.stripname) {
+					title = replaceAll(title, dashboard.stripname[i], '');
+				}
 				var titleFontRatio = (getStringLengthRatio(title) / (7 * title.length));
 				setCols++;
 				colDiv = document.createElement('div');
