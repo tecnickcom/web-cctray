@@ -9,9 +9,6 @@
 # This file is part of web-cctray software.
 # ----------------------------------------------------------------------------------------------------------------------
 
-# List special make targets that are not associated with files
-.PHONY: help all deps clean build install uninstall rpm deb bz2 bintray
-
 # Project owner
 OWNER=tecnickcom
 
@@ -66,6 +63,7 @@ PATHBZ2PKG=$(CURRENTDIR)/target/BZ2
 # --- MAKE TARGETS ---
 
 # Display general help about this command
+.PHONY: help
 help:
 	@echo ""
 	@echo "Welcome to ${PROJECT} make."
@@ -87,6 +85,7 @@ help:
 all: help
 
 # Install dependencies (assume Ubuntu/Debian OS)
+.PHONY: deps
 deps:
 	rm -rf ./vendor
 	mkdir -p ./vendor
@@ -96,11 +95,13 @@ deps:
 	npm install --prefix ./vendor/ csso-cli
 
 # Clean the target directory
+.PHONY: clean
 clean:
 	rm -rf ./target
 	rm -rf ./vendor
 
 # Build the project
+.PHONY: build
 build:
 	rm -rf ./target/${WEBPATH}
 	mkdir -p ./target/${WEBPATH}
@@ -110,6 +111,7 @@ build:
 	for i in `find ./target/${WEBPATH} | grep -E "\.html$$"`; do ./vendor/usr/bin/tidy -modify $$i; done
 
 # Install this application
+.PHONY: install
 install: uninstall
 	mkdir -p $(PATHINSTWEB)
 	cp -f ./target/${WEBPATH}/index.html $(PATHINSTWEB)
@@ -132,6 +134,7 @@ ifneq ($(strip $(CONFIGPATH)),)
 endif
 
 # Remove all installed files (excluding the config dir)
+.PHONY: uninstall
 uninstall:
 	rm -f $(PATHINSTWEB)/index.html
 	rm -f $(PATHINSTWEB)/favicon.ico
@@ -141,6 +144,7 @@ uninstall:
 # --- PACKAGING ---
 
 # Build the RPM package for RedHat-like Linux distributions
+.PHONY: rpm
 rpm:
 	rm -rf $(PATHRPMPKG)
 	rpmbuild \
@@ -158,6 +162,7 @@ rpm:
 	-bb resources/rpm/rpm.spec
 
 # Build the DEB package for Debian-like Linux distributions
+.PHONY: deb
 deb:
 	rm -rf $(PATHDEBPKG)
 	make install DESTDIR=$(PATHDEBPKG)/$(PKGNAME)-$(VERSION)
@@ -180,12 +185,14 @@ deb:
 	cd $(PATHDEBPKG)/$(PKGNAME)-$(VERSION) && debuild -us -uc
 
 # build a compressed bz2 archive
+.PHONY: bz2
 bz2:
 	rm -rf $(PATHBZ2PKG)
 	make install DESTDIR=$(PATHBZ2PKG)
 	tar -jcvf $(PATHBZ2PKG)/$(PKGNAME)-$(VERSION)-$(RELEASE).tbz2 -C $(PATHBZ2PKG) $(WEBROOT)
 
 # upload linux packages to bintray
+.PHONY: bintray
 bintray: rpm deb
 	@curl -T target/RPM/RPMS/noarch/tecnickcom-${PROJECT}-${VERSION}-${RELEASE}.noarch.rpm -u${APIUSER}:${APIKEY} -H "X-Bintray-Package:${PROJECT}" -H "X-Bintray-Version:${VERSION}" -H "X-Bintray-Publish:1" -H "X-Bintray-Override:1" https://api.bintray.com/content/tecnickcom/rpm/tecnickcom-${PROJECT}-${VERSION}-${RELEASE}.noarch.rpm
 	@curl -T target/DEB/tecnickcom-${PROJECT}_${VERSION}-${RELEASE}_all.deb -u${APIUSER}:${APIKEY} -H "X-Bintray-Package:${PROJECT}" -H "X-Bintray-Version:${VERSION}" -H "X-Bintray-Debian-Distribution:all" -H "X-Bintray-Debian-Component:main" -H "X-Bintray-Debian-Architecture:all" -H "X-Bintray-Publish:1" -H "X-Bintray-Override:1" https://api.bintray.com/content/tecnickcom/deb/tecnickcom-${PROJECT}_${VERSION}-${RELEASE}_all.deb
